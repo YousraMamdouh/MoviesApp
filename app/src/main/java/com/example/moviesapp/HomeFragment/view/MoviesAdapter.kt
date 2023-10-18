@@ -33,8 +33,8 @@ class MoviesAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currentMovie:Movie = getItem(position)
-
-        Glide.with(context).load(currentMovie.poster_path).placeholder(R.drawable.placeholder).into(holder.movieImage)
+        val posterUrl = "https://image.tmdb.org/t/p/w500${currentMovie.poster_path}"
+        Glide.with(context).load(posterUrl).placeholder(R.drawable.placeholder).into(holder.movieImage)
 
         holder.movieTitle.text = currentMovie.title
         holder.movieReleaseData.text = currentMovie.release_date

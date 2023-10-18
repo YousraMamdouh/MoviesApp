@@ -11,5 +11,8 @@ import retrofit2.http.Query
 interface ApiService{
     @Headers(NetworkConstants.authorization,NetworkConstants.accept)
     @GET("movie/popular")
-    fun getPopularMovies(): MovieResponse
+    suspend fun getPopularMovies(
+        @Query("language") language: String = "en-US",
+        @Query("page") page: Int
+    ): MovieResponse
 }

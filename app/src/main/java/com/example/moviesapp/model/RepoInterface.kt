@@ -1,6 +1,6 @@
 package com.example.moviesapp.model
 
 interface RepoInterface {
-    suspend fun getAllMovies(): MovieResponse
+    suspend fun getMoviesByPage(page: Int): MovieResponse
 
 }

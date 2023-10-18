@@ -5,14 +5,25 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.moviesapp.HomeFragment.viewModel.HomeViewModel
+import com.example.moviesapp.HomeFragment.viewModel.HomeViewModelFactory
 import com.example.moviesapp.R
-
-
+import com.example.moviesapp.model.Repository
+import com.example.moviesapp.network.MoviesClient
 
 
 class HomeFragmentView : Fragment() {
 
-
+    lateinit var recyclerView: RecyclerView
+    lateinit var factory: HomeViewModelFactory
+    lateinit var viewModel: HomeViewModel
+    lateinit var adapter: MoviesAdapter
+    lateinit var layoutManager: LinearLayoutManager
+    lateinit var searchView: SearchView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -25,5 +36,60 @@ class HomeFragmentView : Fragment() {
         return inflater.inflate(R.layout.fragment_home_view, container, false)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        recyclerView = view.findViewById(R.id.recyclerView)
+        searchView = view.findViewById(R.id.searchView)
+        setUpRecyclerView()
+        setUpViewModel()
+        observeMovies()
+        loadMoreMoviesOnScroll()
+
+    }
+
+    private fun setUpViewModel() {
+        factory = HomeViewModelFactory(
+            Repository.getInstance(
+                MoviesClient.getInstance()
+
+            )
+        )
+        viewModel = ViewModelProvider(this, factory).get(HomeViewModel::class.java)
+    }
+
+    private fun observeMovies() {
+        viewModel.movies.observe(viewLifecycleOwner) {
+                movies,
+            ->
+            if (movies != null) {
+                adapter.submitList(movies)
+            }
+
+        }
+    }
+
+    private fun loadMoreMoviesOnScroll() {
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                val visibleItemCount = layoutManager.childCount
+                val totalItemCount = layoutManager.itemCount
+                val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+                if (visibleItemCount + firstVisibleItemPosition >= totalItemCount - 5) {
+                    // User is close to the end, load more movies
+                    viewModel.loadMoreMovies()
+                }
+            }
+        })
+    }
+
+    private fun setUpRecyclerView() {
+        layoutManager = LinearLayoutManager(activity)
+        layoutManager.orientation = RecyclerView.VERTICAL
+        adapter = activity?.let { MoviesAdapter(it, ArrayList()) }!!
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = layoutManager
+    }
 
 }

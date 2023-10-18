@@ -10,9 +10,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class HomeViewModel(private val _repo: RepoInterface): ViewModel() {
-
-    private var _stores: MutableLiveData<List<Movie>> = MutableLiveData<List<Movie>>()
-    val products: LiveData<List<Movie>> = _stores
+    private var currentPage = 1
+    private var _movies: MutableLiveData<List<Movie>> = MutableLiveData<List<Movie>>()
+    val movies: LiveData<List<Movie>> = _movies
 
 
 
@@ -20,11 +20,20 @@ class HomeViewModel(private val _repo: RepoInterface): ViewModel() {
         getMoviesFromAPI()
     }
 
-
+    fun loadMoreMovies() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val newMovies = _repo.getMoviesByPage(currentPage + 1).results
+            currentPage++
+            val currentList = _movies.value?.toMutableList() ?: mutableListOf()
+            currentList.addAll(newMovies)
+            _movies.postValue(currentList)
+        }
+    }
     private fun getMoviesFromAPI()
     {
         viewModelScope.launch(Dispatchers.IO) {
-            _stores.postValue(_repo.getAllMovies().results)
+            val initialMovies = _repo.getMoviesByPage(currentPage).results
+            _movies.postValue(initialMovies)
         }
     }
 }

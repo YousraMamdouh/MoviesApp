@@ -20,8 +20,8 @@ class MoviesClient: RemoteService {
         }
     }
 
-    override suspend fun getAllMovies(): MovieResponse {
-        return apiService.getPopularMovies()
+    override suspend fun getAllMovies(page:Int): MovieResponse {
+        return apiService.getPopularMovies(page = page)
     }
 
 }

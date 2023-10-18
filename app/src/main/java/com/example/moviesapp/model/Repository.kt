@@ -22,7 +22,7 @@ class Repository(var remoteSource: RemoteService):RepoInterface{
     }
 
 
-    override suspend fun getAllMovies(): MovieResponse {
-        return remoteSource.getAllMovies()
+    override suspend fun getMoviesByPage(page: Int): MovieResponse {
+        return remoteSource.getAllMovies(page = page)
     }
 }

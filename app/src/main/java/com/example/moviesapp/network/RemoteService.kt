@@ -4,5 +4,5 @@ import com.example.moviesapp.model.MovieResponse
 
 
 interface RemoteService {
-    suspend fun getAllMovies(): MovieResponse
+    suspend fun getAllMovies(page:Int): MovieResponse
 }
