@@ -19,8 +19,12 @@ import com.example.moviesapp.model.Movie
 import com.example.moviesapp.model.Repository
 import com.example.moviesapp.network.MoviesClient
 
-
-class HomeFragmentView : Fragment(),OnMovieClickListener {
+/**
+ * The `HomeFragmentView` class represents the main fragment of the application where a list of movies
+ * is displayed and can be interacted with. It is responsible for initializing the UI components and
+ * handling user interactions.
+ */
+class HomeFragmentView : Fragment(), OnMovieClickListener {
 
     lateinit var recyclerView: RecyclerView
     lateinit var factory: HomeViewModelFactory
@@ -28,10 +32,6 @@ class HomeFragmentView : Fragment(),OnMovieClickListener {
     lateinit var adapter: MoviesAdapter
     lateinit var layoutManager: LinearLayoutManager
     lateinit var searchView: SearchView
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,6 +52,9 @@ class HomeFragmentView : Fragment(),OnMovieClickListener {
 
     }
 
+    /**
+     * Initializes the ViewModel and sets up the ViewModelFactory for the `HomeViewModel`.
+     */
     private fun setUpViewModel() {
         factory = HomeViewModelFactory(
             Repository.getInstance(
@@ -62,6 +65,9 @@ class HomeFragmentView : Fragment(),OnMovieClickListener {
         viewModel = ViewModelProvider(this, factory).get(HomeViewModel::class.java)
     }
 
+    /**
+     * Observes changes in the list of movies and updates the adapter when new data is available.
+     */
     private fun observeMovies() {
         viewModel.movies.observe(viewLifecycleOwner) {
                 movies,
@@ -73,6 +79,9 @@ class HomeFragmentView : Fragment(),OnMovieClickListener {
         }
     }
 
+    /**
+     * Implements infinite scrolling for loading more movies when the user is close to the end of the list.
+     */
     private fun loadMoreMoviesOnScroll() {
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -89,18 +98,26 @@ class HomeFragmentView : Fragment(),OnMovieClickListener {
         })
     }
 
+    /**
+     * Sets up the RecyclerView and its adapter.
+     */
     private fun setUpRecyclerView() {
         layoutManager = LinearLayoutManager(activity)
         layoutManager.orientation = RecyclerView.VERTICAL
-        adapter = activity?.let { MoviesAdapter(it, ArrayList(),this) }!!
+        adapter = activity?.let { MoviesAdapter(it, ArrayList(), this) }!!
         recyclerView.adapter = adapter
         recyclerView.layoutManager = layoutManager
     }
 
-    override fun showMovieDetails(movie:Movie) {
-//        val action = MoviesFragmentDirections.actionMoviesFragmentToMovieDetailsFragment(currentMovie.id)
+    /**
+     * Handles the event when a movie item is clicked. Navigates to the details screen for the selected movie.
+     *
+     * @param movie The selected movie.
+     */
+    override fun showMovieDetails(movie: Movie) {
 
-        val action = HomeFragmentViewDirections.actionHomeFragmentViewToMovieDetailsFragmentView(movie)
+        val action =
+            HomeFragmentViewDirections.actionHomeFragmentViewToMovieDetailsFragmentView(movie)
         findNavController().navigate(action)
     }
 
