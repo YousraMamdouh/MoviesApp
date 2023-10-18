@@ -9,7 +9,7 @@ class MoviesClient: RemoteService {
     /**
      * The API service used for making network requests to fetch movie data.
      */
-    val apiService: ApiService by lazy {
+    private val apiService: ApiService by lazy {
         RetrofitHelper.retrofitInstance.create(ApiService::class.java)
     }
 

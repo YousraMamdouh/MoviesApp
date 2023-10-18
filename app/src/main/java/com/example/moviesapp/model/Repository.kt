@@ -7,7 +7,7 @@ import com.example.moviesapp.network.RemoteService
  * such as APIs or network services. It implements the `RepoInterface` and delegates data fetching operations
  * to the provided `RemoteService`.
  */
-class Repository(var remoteSource: RemoteService) : RepoInterface {
+class Repository(private var remoteSource: RemoteService) : RepoInterface {
     companion object {
         private var instance: Repository? = null
 

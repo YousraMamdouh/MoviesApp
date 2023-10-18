@@ -7,8 +7,8 @@ import retrofit2.converter.gson.GsonConverterFactory
  * It follows the Singleton pattern, ensuring that only one instance of Retrofit is created for the entire application's lifecycle.
  */
 object RetrofitHelper {
-    const val BASE_URL="https://api.themoviedb.org/3/"
-    val retrofitInstance= Retrofit.Builder()
+    private const val BASE_URL="https://api.themoviedb.org/3/"
+    val retrofitInstance: Retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)
         .addConverterFactory(GsonConverterFactory.create())
         .build()

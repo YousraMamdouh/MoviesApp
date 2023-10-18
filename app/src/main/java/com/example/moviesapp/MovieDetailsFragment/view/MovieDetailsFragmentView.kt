@@ -1,20 +1,13 @@
 package com.example.moviesapp.MovieDetailsFragment.view
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.SearchView
 import android.widget.TextView
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.moviesapp.HomeFragment.view.MoviesAdapter
-import com.example.moviesapp.HomeFragment.viewModel.HomeViewModel
-import com.example.moviesapp.HomeFragment.viewModel.HomeViewModelFactory
 import com.example.moviesapp.R
 import com.example.moviesapp.model.Movie
 
@@ -64,7 +57,7 @@ class MovieDetailsFragmentView : Fragment() {
         movieTitle.text = movie.title
         movieVote.text = "${movie.voteAverage}"
         movieOverview.text = movie.overview
-        movieLanguage.text = "${movie.originalLanguage}"
+        movieLanguage.text = movie.originalLanguage
 
         val posterUrl = "https://image.tmdb.org/t/p/w500${movie.posterPath}"
         Glide.with(this).load(posterUrl).into(imageView)
