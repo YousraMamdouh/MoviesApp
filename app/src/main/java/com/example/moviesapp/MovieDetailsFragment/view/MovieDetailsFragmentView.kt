@@ -1,33 +1,35 @@
 package com.example.moviesapp.MovieDetailsFragment.view
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.SearchView
+import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.moviesapp.HomeFragment.view.MoviesAdapter
+import com.example.moviesapp.HomeFragment.viewModel.HomeViewModel
+import com.example.moviesapp.HomeFragment.viewModel.HomeViewModelFactory
 import com.example.moviesapp.R
+import com.example.moviesapp.model.Movie
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [MovieDetailsFragmentView.newInstance] factory method to
- * create an instance of this fragment.
- */
 class MovieDetailsFragmentView : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    lateinit var imageView: ImageView
+    lateinit var movieTitle: TextView
+    lateinit var movieVote: TextView
+    lateinit var movieOverview: TextView
+    lateinit var movieLanguage: TextView
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+
     }
 
     override fun onCreateView(
@@ -38,23 +40,32 @@ class MovieDetailsFragmentView : Fragment() {
         return inflater.inflate(R.layout.fragment_movie_details_view, container, false)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment MovieDetailsFragmentView.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            MovieDetailsFragmentView().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        movieLanguage = view.findViewById(R.id.originalLang)
+        movieOverview = view.findViewById(R.id.movieOverview)
+        movieTitle = view.findViewById(R.id.movieName)
+        movieVote = view.findViewById(R.id.vote)
+        imageView = view.findViewById(R.id.imageView)
+        // Access Safe Args bundle
+        val args = MovieDetailsFragmentViewArgs.fromBundle(requireArguments())
+        val movie: Movie = args.movie
+
+        // Populate views with movie data
+        movieTitle.text = movie.title
+        movieVote.text = "${movie.vote_average}"
+        movieOverview.text = movie.overview
+        movieLanguage.text = "${movie.original_language}"
+
+        // Load the movie poster using Glide
+        val posterUrl = "https://image.tmdb.org/t/p/w500${movie.poster_path}"
+       Glide.with(this).load(posterUrl).into(imageView)
     }
 }
+
+
+
+
+
+
+

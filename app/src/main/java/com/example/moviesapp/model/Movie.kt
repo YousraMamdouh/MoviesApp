@@ -9,6 +9,7 @@ data class Movie(
     val poster_path: String,
     val release_date: String,
     val vote_average: Double,
-    val vote_count: Int
+    val vote_count: Int,
+    val original_language: String
 
 ):Serializable

@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.moviesapp.HomeFragment.viewModel.HomeViewModel
 import com.example.moviesapp.HomeFragment.viewModel.HomeViewModelFactory
 import com.example.moviesapp.R
+import com.example.moviesapp.model.Movie
 import com.example.moviesapp.model.Repository
 import com.example.moviesapp.network.MoviesClient
 
@@ -96,10 +97,10 @@ class HomeFragmentView : Fragment(),OnMovieClickListener {
         recyclerView.layoutManager = layoutManager
     }
 
-    override fun showMovieDetails(movieID: Int) {
+    override fun showMovieDetails(movie:Movie) {
 //        val action = MoviesFragmentDirections.actionMoviesFragmentToMovieDetailsFragment(currentMovie.id)
 
-        val action = HomeFragmentViewDirections.actionHomeFragmentViewToMovieDetailsFragmentView(movieID)
+        val action = HomeFragmentViewDirections.actionHomeFragmentViewToMovieDetailsFragmentView(movie)
         findNavController().navigate(action)
     }
 

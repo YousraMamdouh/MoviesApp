@@ -42,7 +42,7 @@ class MoviesAdapter(
         holder.movieReleaseData.text = currentMovie.release_date
 
         holder.card.setOnClickListener {
-            clickListener.showMovieDetails(currentMovie.id)
+            clickListener.showMovieDetails(currentMovie)
         }
 
 
