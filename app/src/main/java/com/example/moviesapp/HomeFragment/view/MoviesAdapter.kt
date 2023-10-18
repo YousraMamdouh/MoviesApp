@@ -13,7 +13,7 @@ import com.example.moviesapp.R
 import com.example.moviesapp.model.Movie
 
 class MoviesAdapter(
-    private var context: Context, private var array: ArrayList<Movie>,
+    private var context: Context, private var array: ArrayList<Movie>, private val clickListener: OnMovieClickListener
 ) : androidx.recyclerview.widget.ListAdapter<Movie,MoviesAdapter.ViewHolder>(MyDiffUtil()) {
 
     var myContext:Context
@@ -38,6 +38,9 @@ class MoviesAdapter(
 
         holder.movieTitle.text = currentMovie.title
         holder.movieReleaseData.text = currentMovie.release_date
+        holder.itemView.setOnClickListener {
+            clickListener.showMovieDetails(currentMovie.id)
+        }
 
 
 

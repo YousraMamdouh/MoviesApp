@@ -1,12 +1,15 @@
 package com.example.moviesapp.HomeFragment.view
 
 import android.os.Bundle
+import android.text.Layout.Directions
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moviesapp.HomeFragment.viewModel.HomeViewModel
@@ -16,7 +19,7 @@ import com.example.moviesapp.model.Repository
 import com.example.moviesapp.network.MoviesClient
 
 
-class HomeFragmentView : Fragment() {
+class HomeFragmentView : Fragment(),OnMovieClickListener {
 
     lateinit var recyclerView: RecyclerView
     lateinit var factory: HomeViewModelFactory
@@ -24,6 +27,7 @@ class HomeFragmentView : Fragment() {
     lateinit var adapter: MoviesAdapter
     lateinit var layoutManager: LinearLayoutManager
     lateinit var searchView: SearchView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -87,9 +91,16 @@ class HomeFragmentView : Fragment() {
     private fun setUpRecyclerView() {
         layoutManager = LinearLayoutManager(activity)
         layoutManager.orientation = RecyclerView.VERTICAL
-        adapter = activity?.let { MoviesAdapter(it, ArrayList()) }!!
+        adapter = activity?.let { MoviesAdapter(it, ArrayList(),this) }!!
         recyclerView.adapter = adapter
         recyclerView.layoutManager = layoutManager
+    }
+
+    override fun showMovieDetails(movieID: Int) {
+//        val action = MoviesFragmentDirections.actionMoviesFragmentToMovieDetailsFragment(currentMovie.id)
+
+        val action = HomeFragmentViewDirections.actionHomeFragmentViewToMovieDetailsFragmentView(movieID)
+        findNavController().navigate(action)
     }
 
 }
